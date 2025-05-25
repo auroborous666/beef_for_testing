@@ -1,0 +1,92 @@
+Yes, there is a **Docker image for BeEF (Browser Exploitation Framework)** — both official and community-maintained versions are available. Using Docker is often easier and cleaner than installing directly on the host.
+
+---
+
+## ✅ Official Docker Image (from BeEF project)
+
+### 🔗 GitHub:
+
+[https://github.com/beefproject/beef/tree/master/docker](https://github.com/beefproject/beef/tree/master/docker)
+
+---
+
+## 🐳 How to Run BeEF via Docker on Ubuntu (AWS EC2)
+
+### 1. **Install Docker (if not already installed)**
+
+```bash
+sudo apt update
+sudo apt install docker.io -y
+sudo systemctl enable --now docker
+```
+
+### 2. **Clone BeEF Repository**
+
+```bash
+git clone https://github.com/beefproject/beef.git
+cd beef/docker
+```
+
+### 3. **Build the Docker Image**
+
+```bash
+docker build -t beef .
+```
+
+> This will take a few minutes as it installs dependencies and configures BeEF inside the container.
+
+### 4. **Run the Container**
+
+```bash
+docker run -d -p 3000:3000 -p 6789:6789 beef
+```
+
+* `3000`: BeEF web UI ([http://your-ip:3000/ui/panel](http://your-ip:3000/ui/panel))
+* `6789`: WebSocket for hook.js (used for communication)
+
+> You can also map port 80 or 443 if you plan to reverse proxy with HTTPS.
+
+---
+
+### 5. **Access BeEF**
+
+* **Web UI**: `http://your-ec2-public-ip:3000/ui/panel`
+* **Hook URL**: `http://your-ec2-public-ip:3000/hook.js`
+* **Default credentials**:
+
+  * Username: `beef`
+  * Password: `beef`
+
+---
+
+### ✅ Optional: Run with Docker Compose
+
+If you'd rather use Docker Compose:
+
+```yaml
+# docker-compose.yml
+version: '3'
+services:
+  beef:
+    build: .
+    ports:
+      - "3000:3000"
+      - "6789:6789"
+```
+
+Run it:
+
+```bash
+docker-compose up -d
+```
+
+---
+
+## 🛡️ Want to Secure It with HTTPS?
+
+You can still use **Nginx + Let's Encrypt** as a reverse proxy in front of your Docker container:
+
+* Docker exposes on `localhost:3000`
+* Nginx proxies from `https://yourdomain.com` to `http://127.0.0.1:3000`
+
+Let me know if you want the full Docker + HTTPS reverse proxy setup.
