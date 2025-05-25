@@ -1,5 +1,5 @@
 Yes, there is a **Docker image for BeEF (Browser Exploitation Framework)** — both official and community-maintained versions are available. Using Docker is often easier and cleaner than installing directly on the host.
-
+***************Change default password for beef********************************************
 ---
 
 ## ✅ Official Docker Image (from BeEF project)
